@@ -14,4 +14,12 @@ module Enumerable
       to_enum
     end
   end
+
+  def my_select(&block)
+    result = []
+    my_each do |i|
+      result << i if block.call(i) == true
+    end
+    result
+  end
 end
