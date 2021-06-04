@@ -1,4 +1,5 @@
 # rubocop:disable Style/GuardClause
+# rubocop:disable Lint/DuplicateBranch
 module Enumerable
   def my_each
     if block_given?
@@ -24,15 +25,48 @@ module Enumerable
     result
   end
 
-  def my_all(&block)
+  def my_all?(&block)
     my_each do |i|
       if block.call(i) == true
+        return true
+      elsif block_given? == false
+        return false
+      elsif block_given? == true
         return true
       else
         return false
       end
     end
   end
+
+  def my_any?(&block)
+    my_each do |i|
+      if block.call(i) == true
+        return true
+      elsif block_given? == true
+        return true
+      elsif block_given? == false
+        return false
+      else
+        return false
+      end
+    end
+  end
+
+  def my_none?(&block)
+    my_each do |i|
+      if block.call(i) == true
+        return false
+      elsif block_given? == false
+        return true
+      elsif block_given? == true
+        return false
+      else
+        return true
+      end
+    end
+  end
 end
 
 # rubocop:enable Style/GuardClause
+# rubocop:enable Lint/DuplicateBranch
