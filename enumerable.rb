@@ -1,3 +1,4 @@
+# rubocop:disable Style/GuardClause
 module Enumerable
   def my_each
     if block_given?
@@ -22,4 +23,16 @@ module Enumerable
     end
     result
   end
+
+  def my_all(&block)
+    my_each do |i|
+      if block.call(i) == true
+        return true
+      else
+        return false
+      end
+    end
+  end
 end
+
+# rubocop:enable Style/GuardClause
