@@ -1,7 +1,3 @@
-# rubocop:disable Style/For
-# rubocop:disable Metrics/ModuleLength
-# rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
-
 module Enumerable
   def my_each
     if block_given?
@@ -11,7 +7,3 @@ module Enumerable
     end
   end
 end
-
-# rubocop:enable Style/For
-# rubocop:enable Metrics/ModuleLength
-# rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
