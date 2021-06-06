@@ -31,7 +31,7 @@ To get a local copy of this project follow the steps below:
 
 ### Setup Local
 
-Use `git clone https://github.com/uzairali19/enumerable-methods.git` to clone the branch directly to your machine
+Use `git clone https://github.com/uzairali19/enumerable_blocks.git` to clone the branch directly to your machine
 
 ### Setting up linter
 
