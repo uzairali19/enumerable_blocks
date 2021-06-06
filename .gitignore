@@ -104,4 +104,4 @@ dist
 .tern-port
 
 .rubocop.yml
-Gemfile
+Gemfile.lock
