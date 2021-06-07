@@ -1,4 +1,5 @@
 # rubocop:disable Style/GuardClause
+# rubocop:disable Style/RedundantSelf
 # rubocop:disable Lint/DuplicateBranch
 module Enumerable
   def my_each
@@ -67,14 +68,14 @@ module Enumerable
     end
   end
 
-  def my_count(&block)
+  def my_count
     count = 0
     if self.length >= count
-      self.my_each do |i|
+      self.my_each do |_i|
         count += 1
       end
     end
-    return count
+    count
   end
 
   def my_map(&block)
@@ -87,4 +88,9 @@ module Enumerable
 end
 
 # rubocop:enable Style/GuardClause
+# rubocop:enable Style/RedundantSelf
 # rubocop:enable Lint/DuplicateBranch
+
+arr = [1, 2, 3, 4, 5, 6]
+
+print arr.my_count
