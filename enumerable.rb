@@ -71,7 +71,7 @@ module Enumerable
   def my_count
     count = 0
     if self.length >= count
-      self.my_each do |_i|
+      self.my_each do |i|
         count += 1
       end
     end
@@ -90,7 +90,3 @@ end
 # rubocop:enable Style/GuardClause
 # rubocop:enable Style/RedundantSelf
 # rubocop:enable Lint/DuplicateBranch
-
-arr = [1, 2, 3, 4, 5, 6]
-
-print arr.my_count
