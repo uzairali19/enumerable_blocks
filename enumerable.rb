@@ -71,7 +71,7 @@ module Enumerable
   def my_count
     count = 0
     if self.length >= count
-      self.my_each do |i|
+      self.my_each do
         count += 1
       end
     end
