@@ -66,6 +66,24 @@ module Enumerable
       end
     end
   end
+
+  def my_count(&block)
+    count = 0
+    if self.length >= count
+      self.my_each do |i|
+        count += 1
+      end
+    end
+    return count
+  end
+
+  def my_map(&block)
+    result = []
+    self.my_each do |i|
+      result << block.call(i)
+    end
+    result
+  end
 end
 
 # rubocop:enable Style/GuardClause
