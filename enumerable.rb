@@ -79,14 +79,16 @@ module Enumerable
     count
   end
 
-  def my_map(&block)
+  def my_map(proc = nil)
     result = []
-    if block_given?
+    if proc != nil
       self.my_each do |i|
-        result << block.call(i)
+        result << proc.call(i)
       end
     else
-      result = self
+      self.my_each do |i|
+        result << yield i
+      end
     end
     result
   end
