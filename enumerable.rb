@@ -1,6 +1,7 @@
 # rubocop:disable Style/GuardClause
 # rubocop:disable Style/RedundantSelf
 # rubocop:disable Lint/DuplicateBranch
+# rubocop:disable Lint/Syntax
 # rubocop:disable Style/IdenticalConditionalBranches
 module Enumerable
   def my_each
@@ -111,6 +112,7 @@ end
 # rubocop:enable Style/GuardClause
 # rubocop:enable Style/RedundantSelf
 # rubocop:enable Lint/DuplicateBranch
+# rubocop:enable Lint/Syntax
 # rubocop:enable Style/IdenticalConditionalBranches
 
 def multiple_els(arr)
