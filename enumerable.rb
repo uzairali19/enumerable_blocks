@@ -1,8 +1,10 @@
-# rubocop:disable Style/GuardClause
 # rubocop:disable Style/RedundantSelf
-# rubocop:disable Lint/DuplicateBranch
-# rubocop:disable Lint/Syntax
+# rubocop:disable Metrics/MethodLength
 # rubocop:disable Style/IdenticalConditionalBranches
+# rubocop:disable Metrics/PerceivedComplexity
+# rubocop:disable Metrics/ModuleLength
+# rubocop:disable Metrics/CyclomaticComplexity
+# rubocop:disable Lint/ToEnumArguments
 module Enumerable
   def my_each
     if block_given?
@@ -20,7 +22,7 @@ module Enumerable
     end
   end
 
-  def my_select(&block)
+  def my_select
     result = []
     if block_given?
       self.my_each do |i|
@@ -47,7 +49,7 @@ module Enumerable
       self.to_a.my_each do |i|
         return result unless [i.class, i.class.superclass].include?(param)
       end
-    elsif !param.nil? && param.class == Regexp
+    elsif !param.nil? && param.instance_of?(Regexp)
       self.to_a.my_each do |i|
         return result unless param.match(i)
       end
@@ -74,9 +76,9 @@ module Enumerable
       self.to_a.my_each do |i|
         return result unless [i.class, i.class.superclass].include?(param)
       end
-    elsif !param.nil? && param.class == Regexp
+    elsif !param.nil? && param.instance_of?(Regexp)
       self.to_a.my_each do |i|
-        return result unless !param.match(i)
+        return result if param.match(i)
       end
     else
       self.to_a.my_each do |i|
@@ -101,7 +103,7 @@ module Enumerable
       self.to_a.my_each do |i|
         return result if [i.class, i.class.superclass].include?(param)
       end
-    elsif !param.nil? && param.class == Regexp
+    elsif !param.nil? && param.instance_of?(Regexp)
       self.to_a.my_each do |i|
         return result if param.match(i)
       end
@@ -113,25 +115,18 @@ module Enumerable
     result = true
   end
 
-  # def my_none?
-  #   if block_given?
-  #     self.my_each do |i|
-  #       return false unless yield i
-  #     end
-  #   else
-  #     self.my_each do |i|
-  #       return true unless i
-  #     end
-  #   end
-  #   false
-  # end
-
-  def my_count
+  def my_count(num = nil)
     count = 0
-    if self.size >= count
-      self.my_each do
-        count += 1
+    if block_given?
+      self.to_a.my_each do |i|
+        count += 1 if yield(i)
       end
+    elsif !block_given? && num.nil?
+      count = self.to_a.length
+    else
+      count = self.to_a.my_select do |i|
+        i == num
+      end.length
     end
     count
   end
@@ -140,39 +135,46 @@ module Enumerable
     return to_enum(:my_map) unless block_given? || !proc.nil?
 
     result = []
-    if proc != nil
+    if proc.nil?
       self.my_each do |i|
-        result << proc.call(i)
+        result << yield(i)
       end
     else
       self.my_each do |i|
-        result << yield(i)
+        result << proc.call(i)
       end
     end
     result
   end
 
   def my_inject(num = nil)
-    if num.nil?
-      total = self[0]
-      self.my_each do |i|
-        total = yield(total, i)
-      end
-    else
+    return to_enum(:my_inject) unless block_given?
+
+    if num
       total = num
       self.my_each do |i|
         total = yield(total, i)
       end
+      total
+    else
+      new_array = self.dup
+      total = new_array.shift
+      new_array.my_each do |i|
+        total = yield(total, i)
+      end
+      total
     end
   end
 end
 
-# rubocop:enable Style/GuardClause
 # rubocop:enable Style/RedundantSelf
-# rubocop:enable Lint/DuplicateBranch
-# rubocop:enable Lint/Syntax
+# rubocop:enable Metrics/MethodLength
 # rubocop:enable Style/IdenticalConditionalBranches
+# rubocop:enable Metrics/PerceivedComplexity
+# rubocop:enable Metrics/ModuleLength
+# rubocop:enable Metrics/CyclomaticComplexity
+# rubocop:enable Lint/ToEnumArguments
 
-def multiple_els(arr)
+def multiply_els(arr)
   arr.my_inject { |total, i| total * i }
 end
