@@ -81,6 +81,8 @@ module Enumerable
   end
 
   def my_map(proc = nil)
+    return to_enum(:my_map) unless block_given? || !proc.nil?
+    
     result = []
     if proc != nil
       self.my_each do |i|
