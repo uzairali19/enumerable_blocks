@@ -6,7 +6,7 @@
 module Enumerable
   def my_each
     if block_given?
-      to_a.length.times { |i| yield to_a[i] }
+      to_a.size.times { |i| yield to_a[i] }
     else
       to_enum
     end
@@ -14,7 +14,7 @@ module Enumerable
 
   def my_each_with_index
     if block_given?
-      to_a.size.times { |i| yield to_a[i], i }
+      my_each { |e| yield(e, index(e)) }
     else
       to_enum
     end
@@ -22,57 +22,113 @@ module Enumerable
 
   def my_select(&block)
     result = []
-    my_each do |i|
-      result << i if block.call(i) == true
+    if block_given?
+      self.my_each do |i|
+        result << i if yield(i)
+      end
+    else
+      to_enum
     end
     result
   end
 
-  def my_all?(&block)
-    my_each do |i|
-      if block.call(i) == true
-        return true
-      elsif block_given? == false
-        return false
-      elsif block_given? == true
-        return true
-      else
-        return false
+  def my_all?(param = nil)
+    result = false
+
+    if block_given?
+      self.to_a.my_each do |i|
+        return result if yield(i) == false
+      end
+    elsif param.nil?
+      self.to_a.my_each do |i|
+        return result if i.nil? || i == false
+      end
+    elsif !param.nil? && (param.is_a? Class)
+      self.to_a.my_each do |i|
+        return result unless [i.class, i.class.superclass].include?(param)
+      end
+    elsif !param.nil? && param.class == Regexp
+      self.to_a.my_each do |i|
+        return result unless param.match(i)
+      end
+    else
+      self.to_a.my_each do |i|
+        return result if i != param
       end
     end
+    result = true
   end
 
-  def my_any?(&block)
-    my_each do |i|
-      if block.call(i) == true
-        return true
-      elsif block_given? == true
-        return true
-      elsif block_given? == false
-        return false
-      else
-        return false
+  def my_any?(param = nil)
+    result = true
+
+    if block_given?
+      self.to_a.my_each do |i|
+        return result if yield(i) == true
+      end
+    elsif param.nil?
+      self.to_a.my_each do |i|
+        return result if i.nil? || i == false
+      end
+    elsif !param.nil? && (param.is_a? Class)
+      self.to_a.my_each do |i|
+        return result unless [i.class, i.class.superclass].include?(param)
+      end
+    elsif !param.nil? && param.class == Regexp
+      self.to_a.my_each do |i|
+        return result unless !param.match(i)
+      end
+    else
+      self.to_a.my_each do |i|
+        return result if i != param
       end
     end
+    result = false
   end
 
-  def my_none?(&block)
-    my_each do |i|
-      if block.call(i) == true
-        return false
-      elsif block_given? == false
-        return true
-      elsif block_given? == true
-        return false
-      else
-        return true
+  def my_none?(param = nil)
+    result = false
+
+    if block_given?
+      self.to_a.my_each do |i|
+        return result if yield(i) == true
+      end
+    elsif param.nil?
+      self.to_a.my_each do |i|
+        return result if !i.nil? and !i == false
+      end
+    elsif !param.nil? && (param.is_a? Class)
+      self.to_a.my_each do |i|
+        return result if [i.class, i.class.superclass].include?(param)
+      end
+    elsif !param.nil? && param.class == Regexp
+      self.to_a.my_each do |i|
+        return result if param.match(i)
+      end
+    else
+      self.to_a.my_each do |i|
+        return result if i != param
       end
     end
+    result = true
   end
+
+  # def my_none?
+  #   if block_given?
+  #     self.my_each do |i|
+  #       return false unless yield i
+  #     end
+  #   else
+  #     self.my_each do |i|
+  #       return true unless i
+  #     end
+  #   end
+  #   false
+  # end
 
   def my_count
     count = 0
-    if self.length >= count
+    if self.size >= count
       self.my_each do
         count += 1
       end
@@ -82,7 +138,7 @@ module Enumerable
 
   def my_map(proc = nil)
     return to_enum(:my_map) unless block_given? || !proc.nil?
-    
+
     result = []
     if proc != nil
       self.my_each do |i|
@@ -90,7 +146,7 @@ module Enumerable
       end
     else
       self.my_each do |i|
-        result << yield i
+        result << yield(i)
       end
     end
     result
