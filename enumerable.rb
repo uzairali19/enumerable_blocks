@@ -1,6 +1,7 @@
 # rubocop:disable Style/GuardClause
 # rubocop:disable Style/RedundantSelf
 # rubocop:disable Lint/DuplicateBranch
+# rubocop:disable Style/IdenticalConditionalBranches
 module Enumerable
   def my_each
     if block_given?
@@ -80,13 +81,36 @@ module Enumerable
 
   def my_map(&block)
     result = []
-    self.my_each do |i|
-      result << block.call(i)
+    if block_given?
+      self.my_each do |i|
+        result << block.call(i)
+      end
+    else
+      result = self
     end
     result
+  end
+
+  def my_inject(num = nil)
+    if num.nil?
+      total = self[0]
+      self.my_each do |i|
+        total = yield(total, i)
+      end
+    else
+      total = num
+      self.my_each do |i|
+        total = yield(total, i)
+      end
+    end
   end
 end
 
 # rubocop:enable Style/GuardClause
 # rubocop:enable Style/RedundantSelf
 # rubocop:enable Lint/DuplicateBranch
+# rubocop:enable Style/IdenticalConditionalBranches
+
+def multiple_els(arr)
+  arr.my_inject { |total, i| total * i }
+end
