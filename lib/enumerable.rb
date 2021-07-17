@@ -5,10 +5,11 @@
 # rubocop:disable Metrics/ModuleLength
 # rubocop:disable Metrics/CyclomaticComplexity
 # rubocop:disable Lint/ToEnumArguments
+
 module Enumerable
-  def my_each
+  def my_each(&block)
     if block_given?
-      to_a.size.times { |i| yield to_a[i] }
+      self.each(&block)
     else
       to_enum
     end

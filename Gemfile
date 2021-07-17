@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
-gem 'rubocop', '>= 1.0', '< 2.0'
-
-gem 'solargraph'
-
+gem 'rake'
+gem 'rspec', '~> 3.0' # g >= 3.0 and < 4.0
+gem 'rubocop'
 gem 'rufo'
+gem 'solargraph'
