@@ -32,11 +32,11 @@ module Enumerable
     if block_given?
       self.my_each do |i|
         result << i if yield(i)
+        result
       end
     else
       to_enum
     end
-    result
   end
 
   def my_all?(param = nil)

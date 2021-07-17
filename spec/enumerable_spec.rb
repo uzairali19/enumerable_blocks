@@ -80,4 +80,43 @@ describe Enumerable do
       end
     end
   end
+
+  describe '#my_select' do
+    context 'If no block given' do
+      it 'returns enum' do
+        expect(array.my_select).to be_an Enumerator
+      end
+    end
+
+    context 'If a block is given and is an array' do
+      it 'yields the selected result' do
+        self_array = []
+        array.my_select do |i|
+          self_array << i if i.odd?
+        end
+        expect(self_array).to eq([1, 3, 5, 7])
+      end
+    end
+
+    context 'If a block is given and is a hash' do
+      it 'yields the selected result' do
+        self_hash = {}
+        hash.my_select do |key, value|
+          self_hash[key] = value if value.odd?
+        end
+        expect(self_hash).to eq({ one: 1, three: 3 })
+      end
+    end
+
+    context 'If a block is given and is an array' do
+      it 'yields the selected result in range' do
+        self_array = []
+        range = array[2..6]
+        range.my_select do |i|
+          self_array << i if i.even?
+        end
+        expect(self_array).to eq([4, 6])
+      end
+    end
+  end
 end
