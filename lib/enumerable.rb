@@ -17,7 +17,11 @@ module Enumerable
 
   def my_each_with_index
     if block_given?
-      my_each { |e| yield(e, index(e)) }
+      c = 0
+      self.each do |i|
+        yield i, c
+        c += 1
+      end
     else
       to_enum
     end

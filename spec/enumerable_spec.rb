@@ -1,5 +1,5 @@
 require 'enumerable'
-# rubocop:disable Lint/UselessAssignment
+
 describe Enumerable do
   array = [1, 2, 3, 4, 5, 6, 7, 8]
   string_array = %w[uzair emanuel dan vic Oni]
@@ -41,5 +41,43 @@ describe Enumerable do
       end
     end
   end
+
+  describe '#my_each_with_index' do
+    context 'If no block given' do
+      it 'returns enum' do
+        expect(array.my_each_with_index).to be_an Enumerator
+      end
+    end
+
+    context 'If a block is given and is an array' do
+      it 'yields hash with index of an element' do
+        self_hash = {}
+        string_array.my_each_with_index do |value, index|
+          self_hash[index] = value
+        end
+        expect(self_hash).to eq({ 0 => 'uzair', 1 => 'emanuel', 2 => 'dan', 3 => 'vic', 4 => 'Oni' })
+      end
+    end
+
+    context 'If a block is given and is a hash' do
+      it 'yields hash with index of a value' do
+        self_hash = {}
+        hash.my_each_with_index do |key, value|
+          self_hash[key] = value
+        end
+        expect(self_hash).to eq({ [:one, 1] => 0, [:two, 2] => 1, [:three, 3] => 2 })
+      end
+    end
+
+    context 'if a block is given and is a range' do
+      it 'yields hash with index of a value and range' do
+        self_hash = {}
+        range = array[3..6]
+        range.my_each_with_index do |key, value|
+          self_hash[key] = value
+        end
+        expect(self_hash).to eq({ 4 => 0, 5 => 1, 6 => 2, 7 => 3 })
+      end
+    end
+  end
 end
-# rubocop:enable Lint/UselessAssignment
