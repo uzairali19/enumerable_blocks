@@ -108,7 +108,7 @@ describe Enumerable do
       end
     end
 
-    context 'If a block is given and is an array' do
+    context 'If a block is given and is a range' do
       it 'yields the selected result in range' do
         self_array = []
         range = array[2..6]
@@ -116,6 +116,54 @@ describe Enumerable do
           self_array << i if i.even?
         end
         expect(self_array).to eq([4, 6])
+      end
+    end
+  end
+
+  describe '#my_all?' do
+    context 'If no block given' do
+      it 'returns true' do
+        empty_array = []
+        expect(empty_array.my_all?).to be_truthy
+      end
+    end
+
+    context 'if block given is nil' do
+      it 'returns false' do
+        nil_array = [nil]
+        expect(nil_array.my_all?).to be_falsey
+      end
+    end
+
+    context 'If a block is given and checks the class' do
+      it 'returns true' do
+        self_array = array.all?(Numeric)
+        expect(self_array).to be_truthy
+      end
+    end
+
+    context 'If a block is given and does not checks the class' do
+      it 'returns false' do
+        self_array = array.all?(Float)
+        expect(self_array).to be_falsey
+      end
+    end
+
+    context 'If a block is given and all conditions pass' do
+      it 'returns true' do
+        self_array = array.all? do |num|
+          num > 0
+        end
+        expect(self_array).to be_truthy
+      end
+    end
+
+    context 'If a block is given and all conditions donot pass' do
+      it 'returns false' do
+        self_array = array.all? do |num|
+          num > 4
+        end
+        expect(self_array).to be_falsey
       end
     end
   end
