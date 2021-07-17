@@ -167,4 +167,52 @@ describe Enumerable do
       end
     end
   end
+
+  describe '#my_any?' do
+    context 'If no block given' do
+      it 'returns false' do
+        empty_array = []
+        expect(empty_array.my_any?).to be_falsey
+      end
+    end
+
+    context 'if any block given is nil' do
+      it 'returns true' do
+        nil_array = [nil, 1]
+        expect(nil_array.my_any?).to be_truthy
+      end
+    end
+
+    context 'If a block is given and checks the class' do
+      it 'returns true' do
+        self_array = array.any?(Numeric)
+        expect(self_array).to be_truthy
+      end
+    end
+
+    context 'If a block is given and does not checks the class' do
+      it 'returns false' do
+        self_array = array.any?(Float)
+        expect(self_array).to be_falsey
+      end
+    end
+
+    context 'If a block is given and any conditions pass' do
+      it 'returns true' do
+        self_array = array.any? do |num|
+          num > 4
+        end
+        expect(self_array).to be_truthy
+      end
+    end
+
+    context 'If a block is given and any conditions donot pass' do
+      it 'returns false' do
+        self_array = array.any? do |num|
+          num > 10
+        end
+        expect(self_array).to be_falsey
+      end
+    end
+  end
 end
