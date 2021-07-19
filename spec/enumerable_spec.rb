@@ -263,4 +263,31 @@ describe Enumerable do
       end
     end
   end
+
+  describe '#my_count' do
+    context 'If a block is not given and argument is not given' do
+      it 'returns the size of the instance' do
+        self_array = array.my_count
+        expect(self_array).to eq(8)
+      end
+    end
+
+    context 'If block is given and argument is not given' do
+      it 'returns the total number of items that meet the condition' do
+        expect(%w[dan oni dan oni dan uzair].my_count { |word| word == 'dan' }).to eq(3)
+      end
+    end
+
+    context 'If block is given and argument is given' do
+      it 'returns the total number of items that meet the condition' do
+        expect(%w[dan oni vic oni dan uzair vic].my_count('dan') { |word| word == 'dan' }).to eq(2)
+      end
+    end
+
+    context 'if block given' do
+      it 'returns number of items that meet the condition' do
+        expect(string_array.my_count { |word| word.length > 3 }).to eq(2)
+      end
+    end
+  end
 end
