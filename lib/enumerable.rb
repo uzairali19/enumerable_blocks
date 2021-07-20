@@ -152,7 +152,7 @@ module Enumerable
     result
   end
 
-  def my_inject(num = nil)
+  def my_inject(num = nil, _sym = nil)
     return to_enum(:my_inject) unless block_given?
 
     if num

@@ -299,7 +299,7 @@ describe Enumerable do
       end
     end
 
-    context 'If a block is given' do
+    context 'If a block is given and is an array' do
       it 'returns a new array matching the conditions' do
         new_array = array.my_map { |i| i + 1 }
         expect(new_array).to eq([2, 3, 4, 5, 6, 7, 8, 9])
@@ -310,6 +310,30 @@ describe Enumerable do
       it 'returns a new array matching the conditions' do
         hash = hash.my_map { |_i, v| v + 1 }
         expect(hash).to eq([2, 3, 4])
+      end
+    end
+  end
+
+  describe '#my_inject' do
+    context 'If a block is not given' do
+      it 'returns enum' do
+        new_array = array.my_inject
+        expect(new_array).to be_an Enumerator
+      end
+    end
+
+    context 'If a block is not given but argument is given' do
+      it "returns the result of argument's condition" do
+        sum = :+.to_proc
+        new_array = array.my_inject(&sum)
+        expect(new_array).to eq(36)
+      end
+    end
+
+    context 'If a block is given and argument is given' do
+      it 'returns the largest word from string_array' do
+        new_array = string_array.my_inject([]) { |memo, word| memo.size > word.size ? memo : word }
+        expect(new_array).to eq('emanuel')
       end
     end
   end
