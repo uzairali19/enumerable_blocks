@@ -290,4 +290,27 @@ describe Enumerable do
       end
     end
   end
+
+  describe '#my_map' do
+    context 'If a block is not given' do
+      it 'returns enum' do
+        new_array = array.my_map
+        expect(new_array).to be_an Enumerator
+      end
+    end
+
+    context 'If a block is given' do
+      it 'returns a new array matching the conditions' do
+        new_array = array.my_map { |i| i + 1 }
+        expect(new_array).to eq([2, 3, 4, 5, 6, 7, 8, 9])
+      end
+    end
+
+    context 'If a block is given and is a hash' do
+      it 'returns a new array matching the conditions' do
+        hash = hash.my_map { |_i, v| v + 1 }
+        expect(hash).to eq([2, 3, 4])
+      end
+    end
+  end
 end
