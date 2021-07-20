@@ -179,7 +179,3 @@ end
 # rubocop:enable Metrics/ModuleLength
 # rubocop:enable Metrics/CyclomaticComplexity
 # rubocop:enable Lint/ToEnumArguments
-
-def multiply_els(arr)
-  arr.my_inject { |total, i| total * i }
-end
