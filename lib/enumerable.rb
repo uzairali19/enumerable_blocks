@@ -5,10 +5,11 @@
 # rubocop:disable Metrics/ModuleLength
 # rubocop:disable Metrics/CyclomaticComplexity
 # rubocop:disable Lint/ToEnumArguments
+
 module Enumerable
-  def my_each
+  def my_each(&block)
     if block_given?
-      to_a.size.times { |i| yield to_a[i] }
+      self.each(&block)
     else
       to_enum
     end
@@ -16,7 +17,11 @@ module Enumerable
 
   def my_each_with_index
     if block_given?
-      my_each { |e| yield(e, index(e)) }
+      c = 0
+      self.each do |i|
+        yield i, c
+        c += 1
+      end
     else
       to_enum
     end
@@ -27,11 +32,11 @@ module Enumerable
     if block_given?
       self.my_each do |i|
         result << i if yield(i)
+        result
       end
     else
       to_enum
     end
-    result
   end
 
   def my_all?(param = nil)
@@ -147,7 +152,7 @@ module Enumerable
     result
   end
 
-  def my_inject(num = nil)
+  def my_inject(num = nil, _sym = nil)
     return to_enum(:my_inject) unless block_given?
 
     if num
@@ -174,7 +179,3 @@ end
 # rubocop:enable Metrics/ModuleLength
 # rubocop:enable Metrics/CyclomaticComplexity
 # rubocop:enable Lint/ToEnumArguments
-
-def multiply_els(arr)
-  arr.my_inject { |total, i| total * i }
-end
